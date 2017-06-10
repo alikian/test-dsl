@@ -8,7 +8,7 @@ services.each {
             git("git://github.com/${service}.git", 'develop')
         }
         steps {
-            maven("test -Dproject.name={service}1")
+            maven("test -Dproject.name={service}")
         }
     }
 }
