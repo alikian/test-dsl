@@ -1,8 +1,10 @@
 def services = ["cst", "customer", "environment","orchestrator","reactor","resolver","rule","solution"]
+String cid="ak186136"
 services.each {
     def service = it
     def jobName = "sa-ca-aws-deploy-app-${service}-dev"
     job(jobName) {
+        logRotator(30, 10, -1, -1)
         parameters {
           password{
             name('AWS_ACCESS_KEY_ID')
@@ -19,13 +21,49 @@ services.each {
             defaultValue('0.0.1-SNAPSHOT')
             description('app deployer template zip version')
           }
+          password{
+            name('ARTIFACTORY_APIKEY')
+            defaultValue('')
+            description('')
+          }
+          string{
+            name('DOCKER_IMAGENAME')
+            defaultValue('springio/springboot-sample')
+            description('')
+          }
+          string{
+            name('DOCKER_TAG')
+            defaultValue('latest')
+            description('')
+          }
+          string{
+            name('PROPERTIES_VERSION')
+            defaultValue('0.0.1-SNAPSHOT')
+            description('app deployer template zip version')
+          }
+          
         }
         wrappers {
             credentialsBinding {
               usernamePassword{
                 usernameVariable("tmc.public.user")
                 passwordVariable("tmc.public.password")
-                credentialsId("ak186136")
+                credentialsId(cid)
+              }
+              usernamePassword{
+                usernameVariable("tmc.dev.user")
+                passwordVariable("tmc.dev.password")
+                credentialsId(cid)
+              }
+              usernamePassword{
+                usernameVariable("tmc.preprod.user")
+                passwordVariable("tmc.preprod.password")
+                credentialsId(cid)
+              }
+              usernamePassword{
+                usernameVariable("tmc.prod.user")
+                passwordVariable("tmc.prod.password")
+                credentialsId(cid)
               }
             }
         }
